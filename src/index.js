@@ -1,13 +1,15 @@
-const http = require('node:http');
-const users = require('./mocks/users');
+import http from 'node:http';
+
+import routes from './routes.js';
 
 const server = http.createServer((request, response) => {
   console.log(`${request.method} ${request.url}`);
+  const route = routes.find((routeObject) => (
+    routeObject.endpoint === request.url && routeObject.method === request.method
+  ))
 
-  if (request.url === '/users') {
-    response.writeHead(200, { 'Content-Type': 'application/json' });
-    response.end(JSON.stringify(users));
-    return;
+  if (route) {
+    return route.handler(request, response);
   }
 
   response.writeHead(404, { 'Content-Type': 'text/html' });
@@ -16,5 +18,5 @@ const server = http.createServer((request, response) => {
 
 
 server.listen(3000, () => {
-  console.log('🔥 Server is running on http://localhost:3000')
+  console.log('🔥 Server is running on http://localhost:3000');
 })
