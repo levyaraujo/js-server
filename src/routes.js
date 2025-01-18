@@ -5,6 +5,11 @@ const routes = [
     endpoint: '/users',
     method: 'GET',
     handler: new UserController().listUsers
+  },
+  {
+    endpoint: '/users/:id',
+    method: 'GET',
+    handler: new UserController().getUserById
   }
 ]
 
